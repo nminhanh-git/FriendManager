@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,25 +8,29 @@
     tools:context="com.example.sev_user.demo5.DetailActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/add_tool_bar"
+        android:id="@+id/detail_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         android:elevation="1dp"></android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="8dp">
 
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/messi" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/detaiL_friend_image_view"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_place_holder"
+            app:civ_border_color="@color/colorPrimaryDark"
+            app:civ_border_width="3dp" />
 
         <TextView
+            android:id="@+id/detail_friend_name_tv"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center"
@@ -43,45 +48,122 @@
         android:orientation="horizontal">
 
         <ImageButton
+            android:id="@+id/detail_favor_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_tab_favorite_clicked" />
 
         <ImageButton
+            android:id="@+id/detail_blacklist_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_tab_blacklist_clicked" />
     </LinearLayout>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:orientation="horizontal"
-        android:weightSum="10">
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:weightSum="4">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
 
-            <LinearLayout
-                android:layout_weight="3"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phone number"
+                android:textSize="14sp"
+                android:textColor="@color/colorSecondaryText"/>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:text="Birthday"
-                    android:textColor="#000"/>
+            <TextView
+                android:id="@+id/detail_friend_phone_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="6"
-                    android:text="hello" />
-            </LinearLayout>
+                android:text="0123456789"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="E-mail"
+                android:textSize="14sp"
+                android:textColor="@color/colorSecondaryText"/>
+
+            <TextView
+                android:id="@+id/detail_friend_email_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="example@gmail.com"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textSize="14sp"
+                android:textColor="@color/colorSecondaryText"/>
+
+            <TextView
+                android:id="@+id/detail_friend_address_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="NY City"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Birthday"
+                android:textSize="14sp"
+                android:textColor="@color/colorSecondaryText"/>
+
+            <TextView
+                android:id="@+id/detail_friend_birthday_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1 - 1 - 2018"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="20sp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

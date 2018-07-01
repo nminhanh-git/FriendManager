@@ -1,12 +1,14 @@
 package com.example.sev_user.demo5;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Fragment1 extends Fragment {
+public class Fragment1 extends android.support.v4.app.Fragment {
 
 
     public Fragment1() {
@@ -40,16 +42,29 @@ public class Fragment1 extends Fragment {
         dbHelper = new MyDB(getActivity());
         adapter = new myAdapter(getActivity(), list);
         mListview.setAdapter(adapter);
+
+        refresh();
+
+        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getActivity(), DetailActivity.class);
+                Friend currentFriend = (Friend) mListview.getItemAtPosition(position);
+                i.putExtra("current friend", currentFriend);
+                startActivity(i);
+            }
+        });
         return view;
     }
 
     @Override
     public void onResume() {
-        refresh();
         super.onResume();
+        refresh();
     }
 
     public void refresh() {
+        list.clear();
         list.addAll(dbHelper.getFriend(0));
         adapter.notifyDataSetChanged();
     }

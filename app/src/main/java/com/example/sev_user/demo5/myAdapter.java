@@ -26,13 +26,13 @@ public class myAdapter extends ArrayAdapter<Friend> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Log.e("MTINH","getView" + " " + position);
+        Log.e("MTINH", "getView" + " " + position);
         ViewHolder holder = new ViewHolder();
         if (convertView == null) {
             LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inf.inflate(R.layout.list_item_layout, parent, false);
 
-        /*Anh xa*/
+            /*Anh xa*/
             holder.lsItemAvt = convertView.findViewById(R.id.profile_image);
             holder.lsItemName = convertView.findViewById(R.id.lsItemName);
             holder.lsItemPhone = convertView.findViewById(R.id.lsItemPhone);
@@ -42,9 +42,10 @@ public class myAdapter extends ArrayAdapter<Friend> {
         }
         /*Hien thi Item*/
         Friend fr = getItem(position);
-        if (!fr.getAvata().equals("")) {
+
+        if (fr.getAvata() != null) {
             Uri uri = Uri.parse(fr.getAvata().toString());
-            holder.lsItemAvt.setImageURI(uri);
+            GlideApp.with(getContext()).load(uri).into(holder.lsItemAvt);
         }
 
         holder.lsItemName.setText(fr.getName().toString());

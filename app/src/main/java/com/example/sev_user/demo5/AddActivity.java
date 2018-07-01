@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -23,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
@@ -32,7 +32,6 @@ public class AddActivity extends AppCompatActivity {
 
     private static final int IMAGE_PERMISSION_REQUEST_CODE = 1;
     private Toolbar mToolBar;
-    private ImageView imgBirthDay;
     private int mYear;
     private int mMonth;
     private int mDay;
@@ -42,8 +41,13 @@ public class AddActivity extends AppCompatActivity {
     private EditText mEdtEmail;
     private EditText mEdtAddress;
 
-    private ImageButton mButtonAddImage;
-    private  String imagePath;
+    private TextView mTextViewAddImg;
+
+    private ImageView mButtonAddImage;
+    private String imagePath = "";
+    private Intent i;
+    private String command;
+    private Friend currentFriend;
 
     MyDB myDB;
 
@@ -62,26 +66,45 @@ public class AddActivity extends AppCompatActivity {
         mButtonAddImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.v("ADD IMAGE", "0000");
-                if (ContextCompat.checkSelfPermission(AddActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    Log.v("ADD IMAGE", "2222");
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(AddActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)  == false) {
-                        Toast.makeText(AddActivity.this, "this app need permission to get the image you want for the item!", Toast.LENGTH_LONG).show();
-                        ActivityCompat.requestPermissions(AddActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, IMAGE_PERMISSION_REQUEST_CODE);
-                        Log.v("ADD IMAGE", "1234");
-                    }
-//                     else {
-//                        ActivityCompat.requestPermissions(EditDetailActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, IMAGE_PERMISSION_REQUEST_CODE);
-//                    }
-                } else {
-                    Log.v("ADD IMAGE", "3456");
-                    Intent getImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(getImageIntent, 0);
-                }
+                checkForPermission();
             }
         });
+        i = getIntent();
+        command = i.getStringExtra("command");
+        currentFriend = (Friend) i.getSerializableExtra("current edit");
+        if (command.equals("edit")) {
+            imagePath = currentFriend.getAvata();
+            Bitmap bitmap;
+            getSupportActionBar().setTitle("EDIT INFORMATION");
+            if (imagePath != "") {
+                mTextViewAddImg.setText("change image");
+                try {
+                    bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(imagePath)));
+                    mButtonAddImage.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
 
+            mEdtName.setText(currentFriend.getName());
+            mEdtPhone.setText(currentFriend.getPhone());
+            mEdtEmail.setText(currentFriend.getEmail());
+            edtBirthDay.setText(currentFriend.getBirthday());
+            mEdtAddress.setText(currentFriend.getAddress());
+        }
+    }
+    //TODO: làm thêm nút xóa ở ToolBar, gọi chức năng xóa
 
+    private void checkForPermission() {
+        if (ContextCompat.checkSelfPermission(AddActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(AddActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == false) {
+                Toast.makeText(AddActivity.this, "this app need permission to get the image you want for the item!", Toast.LENGTH_LONG).show();
+                ActivityCompat.requestPermissions(AddActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, IMAGE_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            Intent getImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(getImageIntent, 0);
+        }
     }
 
     private void initWidget() {
@@ -100,7 +123,9 @@ public class AddActivity extends AppCompatActivity {
         mEdtAddress = (EditText) findViewById(R.id.add_address_edt);
 
         myDB = new MyDB(this);
-        mButtonAddImage = (ImageButton) findViewById(R.id.add_image_button);
+        mButtonAddImage = (ImageView) findViewById(R.id.add_image_button);
+        mTextViewAddImg = (TextView) findViewById(R.id.add_image_caption);
+        mTextViewAddImg.setText("Add image");
     }
 
     @Override
@@ -112,10 +137,10 @@ public class AddActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.cancel:
+            case R.id.add_cancel:
                 finish();
                 return true;
-            case R.id.save:
+            case R.id.add_save:
                 Intent i = getIntent();
                 String name = mEdtName.getText().toString();
                 String phone = mEdtPhone.getText().toString();
@@ -126,9 +151,19 @@ public class AddActivity extends AppCompatActivity {
                 String command = i.getStringExtra("command");
                 if (command.equals("create")) {
                     createFriend(name, phone, email, address, birthday);
+                } else if (command.equals("edit")) {
+                    int id = currentFriend.getId();
+                    int status = currentFriend.getsFriend();
+                    updateFriend(id, name, phone, email, address, birthday, status);
                 }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateFriend(int id, String name, String phone, String email, String address, String birthday, int status) {
+        Friend updatedFriend = new Friend(id, name, birthday, phone, email, address, imagePath, status);
+        myDB.updateFriend(updatedFriend);
+        finish();
     }
 
     public void createFriend(String name, String phone, String email, String address, String birthday) {
@@ -175,17 +210,11 @@ public class AddActivity extends AppCompatActivity {
             Uri targetUri = data.getData();
             imagePath = targetUri.toString();
 
-            String[] fileColumns = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(targetUri, fileColumns, null, null, null);
-            cursor.moveToFirst();
-            int cIndex = cursor.getColumnIndex(fileColumns[0]);
-            String picturePath = cursor.getString(cIndex);
-            cursor.close();
-
             Bitmap bitmap;
             try {
                 bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(imagePath)));
                 mButtonAddImage.setImageBitmap(bitmap);
+                mTextViewAddImg.setText("change image");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

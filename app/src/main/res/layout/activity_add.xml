@@ -6,37 +6,52 @@
     android:orientation="vertical"
     android:weightSum="10"
     tools:context="com.example.sev_user.demo5.AddActivity">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/add_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         android:elevation="1dp"></android.support.v7.widget.Toolbar>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
-        android:background="#ef5350"
+        android:background="@color/colorAccent"
         android:gravity="center"
         android:orientation="vertical">
-        <ImageButton
+
+        <ImageView
             android:id="@+id/add_image_button"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_add_a_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:padding="150dp"
             android:scaleType="centerCrop"
-            />
-    </LinearLayout>
+            android:src="@drawable/ic_add_a_photo" />
+
+        <TextView
+            android:id="@+id/add_image_caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#78000000"
+            android:text="add image"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="#fafafa"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:layout_weight="6"
         android:orientation="vertical">
 
@@ -60,7 +75,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:background="@drawable/background_edit"
-                android:hint="name" />
+                android:hint="name"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords"
+                android:maxLines="1"
+                android:minLines="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -85,7 +104,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:background="@drawable/background_edit"
-                android:hint="birthday" />
+                android:hint="birthday"
+                android:imeOptions="actionNext" />
         </LinearLayout>
 
         <LinearLayout
@@ -108,7 +128,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:background="@drawable/background_edit"
-                android:hint="phone" />
+                android:hint="phone"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:minLines="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -131,7 +155,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:background="@drawable/background_edit"
-                android:hint="e-mail" />
+                android:hint="e-mail"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:minLines="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -154,7 +182,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:background="@drawable/background_edit"
-                android:hint="address" />
+                android:hint="address"
+                android:imeOptions="actionDone"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                android:minLines="1" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

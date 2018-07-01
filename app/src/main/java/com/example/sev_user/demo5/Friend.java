@@ -1,11 +1,12 @@
 package com.example.sev_user.demo5;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by sev_user on 6/29/2018.
  */
-public class Friend {
+public class Friend implements Serializable {
     private int id;
     private String name;
     private String birthday;
